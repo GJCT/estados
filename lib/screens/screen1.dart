@@ -1,3 +1,5 @@
+import 'package:estados/models/user.dart';
+import 'package:estados/services/user.dart';
 import 'package:flutter/material.dart';
 
 class Screen1 extends StatelessWidget {
@@ -10,7 +12,17 @@ class Screen1 extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Screen 1'),
       ),
-      body: const InfoUsers(),
+      body: StreamBuilder(
+        stream: usersServices.userStream,
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot){
+          
+          return snapshot.hasData
+            ? InfoUsers( user: snapshot.data, )
+            : const Center(child: Text( 'No hay información del usuario' ) );
+
+        },
+      ),
+
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.last_page),
         onPressed: () => Navigator.pushReplacementNamed(context, '2'),
@@ -20,7 +32,9 @@ class Screen1 extends StatelessWidget {
 }
 
 class InfoUsers extends StatelessWidget {
-  const InfoUsers({Key? key}) : super(key: key);
+
+final User? user;
+  const InfoUsers({Key? key, required this.user}) : super(key: key);
 
 
   @override
@@ -31,19 +45,19 @@ class InfoUsers extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment:  CrossAxisAlignment.start,
-        children: const[
-          Text('General', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-          Divider(),
+        children: [
+          const Text('General', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+          const Divider(),
 
-          ListTile(),
-          ListTile(),
+          ListTile(title: Text('Nombre: ${user!.name}')),
+          ListTile(title: Text('Nombre: ${user!.year}')),
 
-          Text('data'),
-          Divider(),
+          const Text('data'),
+          const Divider(),
 
-          ListTile(),
-          ListTile(),
-          ListTile()
+          ListTile(title: Text('Nombre: ${user!.profesions}')),
+          ListTile(title: Text('Nombre: ${user!.profesions}')),
+          ListTile(title: Text('Nombre: ${user!.profesions}'))
         ],
       ),
     );
